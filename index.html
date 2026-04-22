@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meal Planning Research Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #FF6B2B;
+    --saffron-light: #FF8C55;
+    --saffron-pale: #FFF0E8;
+    --green: #1A7A4A;
+    --green-light: #E8F5EE;
+    --dark: #1A1A1A;
+    --mid: #4A4A4A;
+    --light: #F7F4F0;
+    --white: #FFFFFF;
+    --border: #E5DDD5;
+    --selected-bg: #FFF0E8;
+    --selected-border: #FF6B2B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* Hero Header */
+  .hero {
+    background: var(--dark);
+    padding: 60px 24px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: var(--saffron);
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 200px; height: 200px;
+    background: var(--green);
+    border-radius: 50%;
+    opacity: 0.1;
+  }
+
+  .hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--saffron);
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span {
+    color: var(--saffron);
+  }
+
+  .hero p {
+    color: #A0A0A0;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 28px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta span {
+    color: #666;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hero-meta span::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--saffron);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .progress-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 14px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-bar-track {
+    flex: 1;
+    height: 4px;
+    background: #F0EAE4;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--saffron), var(--saffron-light));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  .progress-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--saffron);
+    white-space: nowrap;
+  }
+
+  /* Main content */
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Section headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    margin-top: 48px;
+  }
+
+  .section-header:first-child { margin-top: 0; }
+
+  .section-num {
+    width: 32px; height: 32px;
+    background: var(--saffron);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 0 28px;
+    margin-top: -8px;
+    margin-left: 44px;
+  }
+
+  /* Question blocks */
+  .q-block {
+    margin-bottom: 32px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.5s forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .q-label .q-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--saffron);
+    margin-right: 6px;
+  }
+
+  .q-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: -10px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  /* Radio & Checkbox options */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .options-grid.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    user-select: none;
+  }
+
+  .option-item:hover {
+    border-color: var(--saffron-light);
+    background: var(--saffron-pale);
+  }
+
+  .option-item input { display: none; }
+
+  .option-item.selected {
+    border-color: var(--saffron);
+    background: var(--saffron-pale);
+  }
+
+  .option-dot {
+    width: 18px; height: 18px;
+    border: 2px solid #CCC;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option-item.selected .option-dot {
+    border-color: var(--saffron);
+    background: var(--saffron);
+  }
+
+  .option-item.selected .option-dot::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 50%;
+  }
+
+  .option-check {
+    width: 18px; height: 18px;
+    border: 2px solid #CCC;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option-item.selected .option-check {
+    border-color: var(--saffron);
+    background: var(--saffron);
+  }
+
+  .option-item.selected .option-check::after {
+    content: '✓';
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .option-text {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+
+  .option-item.selected .option-text {
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  /* Rating scale */
+  .rating-scale {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .rating-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 0 2px;
+  }
+
+  .rating-labels span {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+  }
+
+  .rating-btn {
+    flex: 1;
+    height: 44px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #BBB;
+    transition: all 0.2s;
+  }
+
+  .rating-btn:hover {
+    border-color: var(--saffron-light);
+    color: var(--saffron);
+  }
+
+  .rating-btn.selected {
+    background: var(--saffron);
+    border-color: var(--saffron);
+    color: white;
+  }
+
+  /* Matrix */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+
+  .matrix-table thead tr {
+    background: var(--dark);
+  }
+
+  .matrix-table thead th {
+    padding: 10px 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+  }
+
+  .matrix-table thead th:first-child {
+    text-align: left;
+    padding-left: 16px;
+  }
+
+  .matrix-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .matrix-table tbody tr:last-child { border-bottom: none; }
+  .matrix-table tbody tr:hover { background: var(--saffron-pale); }
+
+  .matrix-table tbody td {
+    padding: 12px 8px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .matrix-table tbody td:first-child {
+    text-align: left;
+    padding-left: 16px;
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 500;
+  }
+
+  .matrix-radio {
+    width: 18px; height: 18px;
+    border: 2px solid #CCC;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .matrix-radio.selected {
+    border-color: var(--saffron);
+    background: var(--saffron);
+  }
+
+  .matrix-radio.selected::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 50%;
+  }
+
+  /* Rank order */
+  .rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    cursor: grab;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .rank-item:active { cursor: grabbing; }
+  .rank-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+
+  .rank-item.drag-over {
+    border-color: var(--saffron);
+    background: var(--saffron-pale);
+  }
+
+  .rank-num {
+    width: 26px; height: 26px;
+    background: var(--saffron);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .rank-text {
+    font-size: 14px;
+    color: var(--mid);
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .drag-icon {
+    color: #CCC;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Text input */
+  .text-input, .open-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    background: white;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  .text-input:focus, .open-textarea:focus {
+    outline: none;
+    border-color: var(--saffron);
+    box-shadow: 0 0 0 3px rgba(255,107,43,0.1);
+  }
+
+  .open-textarea {
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  /* Conditional block */
+  .conditional-block {
+    display: none;
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 20px;
+    margin-top: 8px;
+  }
+
+  .conditional-block.visible { display: block; }
+
+  /* Submit section */
+  .submit-section {
+    margin-top: 48px;
+    padding: 32px;
+    background: var(--dark);
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .submit-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .submit-section p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .submit-btn {
+    background: var(--saffron);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: var(--saffron-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(255,107,43,0.3);
+  }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .success-screen.visible { display: block; }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+  }
+
+  .success-screen h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .success-screen p {
+    color: var(--mid);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* Validation */
+  .q-block.error .option-item,
+  .q-block.error .text-input,
+  .q-block.error .open-textarea,
+  .q-block.error .rating-btn,
+  .q-block.error .matrix-table {
+    border-color: #E85D4A;
+  }
+
+  .error-msg {
+    display: none;
+    color: #E85D4A;
+    font-size: 12px;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .q-block.error .error-msg { display: block; }
+
+  @media (max-width: 520px) {
+    .options-grid.two-col { grid-template-columns: 1fr; }
+    .rating-scale { gap: 4px; }
+    .rating-btn { font-size: 13px; }
+    .matrix-table thead th, .matrix-table tbody td { padding: 8px 4px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🍛 User Research • Meal Planning</div>
+    <h1>Khaane ki <span>planning</span> ke baare mein 5 minute?</h1>
+    <p>We're building a smarter meal planning tool for busy Indians. Your honest answers help us understand what's actually broken — no right or wrong responses.</p>
+    <div class="hero-meta">
+      <span>4–5 minutes only</span>
+      <span>12 questions</span>
+      <span>100% anonymous</span>
+    </div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 12</div>
+  </div>
+</div>
+
+<div class="main" id="formMain">
+
+  <!-- Section 1 -->
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">About You</div>
+  </div>
+  <div class="section-divider"></div>
+
+  <!-- Q1 -->
+  <div class="q-block" style="animation-delay:0.05s" id="q1-block" data-required="true" data-type="radio">
+    <div class="q-label"><span class="q-num">Q1.</span> Your current living situation?</div>
+    <div class="options-grid">
+      <label class="option-item" onclick="selectOption(this,'q1')">
+        <input type="radio" name="q1" value="alone">
+        <div class="option-dot"></div>
+        <div class="option-text">Living alone / with roommates</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q1')">
+        <input type="radio" name="q1" value="couple">
+        <div class="option-dot"></div>
+        <div class="option-text">Living with partner (no kids)</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q1')">
+        <input type="radio" name="q1" value="family_kids">
+        <div class="option-dot"></div>
+        <div class="option-text">Living with partner + kids</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q1')">
+        <input type="radio" name="q1" value="parents">
+        <div class="option-dot"></div>
+        <div class="option-text">Living with family / parents</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select one option</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" style="animation-delay:0.1s" id="q2-block" data-required="true" data-type="radio">
+    <div class="q-label"><span class="q-num">Q2.</span> On a typical weekday, how do you handle your meals?</div>
+    <div class="options-grid">
+      <label class="option-item" onclick="selectOption(this,'q2')">
+        <input type="radio" name="q2" value="cook_self">
+        <div class="option-dot"></div>
+        <div class="option-text">I cook myself most days</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q2')">
+        <input type="radio" name="q2" value="mix">
+        <div class="option-dot"></div>
+        <div class="option-text">Mix of cooking and ordering</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q2')">
+        <input type="radio" name="q2" value="mostly_order">
+        <div class="option-dot"></div>
+        <div class="option-text">I mostly order from Zomato / Swiggy</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q2')">
+        <input type="radio" name="q2" value="someone_else">
+        <div class="option-dot"></div>
+        <div class="option-text">Someone else at home cooks</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select one option</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" style="animation-delay:0.15s" id="q3-block" data-required="true" data-type="rating">
+    <div class="q-label"><span class="q-num">Q3.</span> How health-conscious are you about what you eat?</div>
+    <div class="rating-scale" id="rating-q3"></div>
+    <div class="rating-labels">
+      <span>I eat whatever</span>
+      <span>I actively track my diet</span>
+    </div>
+    <div class="error-msg">Please select a rating</div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Your Real Behavior</div>
+  </div>
+  <div class="section-divider"></div>
+
+  <!-- Q4 -->
+  <div class="q-block" style="animation-delay:0.2s" id="q4-block" data-required="true" data-type="radio">
+    <div class="q-label"><span class="q-num">Q4.</span> In the last 7 days, how many times did you order food <em>instead of cooking</em> — even though you intended to cook?</div>
+    <div class="options-grid two-col">
+      <label class="option-item" onclick="selectOption(this,'q4')">
+        <input type="radio" name="q4" value="never">
+        <div class="option-dot"></div>
+        <div class="option-text">Never happened</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q4')">
+        <input type="radio" name="q4" value="1-2">
+        <div class="option-dot"></div>
+        <div class="option-text">1–2 times</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q4')">
+        <input type="radio" name="q4" value="3-4">
+        <div class="option-dot"></div>
+        <div class="option-text">3–4 times</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q4')">
+        <input type="radio" name="q4" value="5+">
+        <div class="option-dot"></div>
+        <div class="option-text">5+ times</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select one option</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" style="animation-delay:0.25s" id="q5-block" data-required="true" data-type="checkbox">
+    <div class="q-label"><span class="q-num">Q5.</span> What usually stops you from cooking at home? <em>(Select all that apply)</em></div>
+    <div class="options-grid">
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="dont_know">
+        <div class="option-check"></div>
+        <div class="option-text">Don't know what to make</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="too_tired">
+        <div class="option-check"></div>
+        <div class="option-text">Too tired after work</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="no_ingredients">
+        <div class="option-check"></div>
+        <div class="option-text">Don't have the right ingredients</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="takes_long">
+        <div class="option-check"></div>
+        <div class="option-text">Takes too long to plan and prep</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="easier_order">
+        <div class="option-check"></div>
+        <div class="option-text">Easier to just order</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q5" value="no_one">
+        <div class="option-check"></div>
+        <div class="option-text">No one to cook with / for</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select at least one option</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" style="animation-delay:0.3s" id="q6-block" data-required="true" data-type="checkbox">
+    <div class="q-label"><span class="q-num">Q6.</span> How do you currently decide what to cook? <em>(Select all that apply)</em></div>
+    <div class="options-grid">
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q6" value="pantry">
+        <div class="option-check"></div>
+        <div class="option-text">Whatever ingredients are available at home</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q6" value="youtube">
+        <div class="option-check"></div>
+        <div class="option-text">YouTube / Instagram / Google recipes</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q6" value="whatsapp">
+        <div class="option-check"></div>
+        <div class="option-text">WhatsApp family suggestions</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q6" value="fixed_routine">
+        <div class="option-check"></div>
+        <div class="option-text">I follow a fixed weekly routine</div>
+      </label>
+      <label class="option-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="q6" value="in_moment">
+        <div class="option-check"></div>
+        <div class="option-text">I don't plan — decide in the moment</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select at least one option</div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Pain Points</div>
+  </div>
+  <div class="section-divider"></div>
+
+  <!-- Q7 Matrix -->
+  <div class="q-block" style="animation-delay:0.35s" id="q7-block" data-required="true" data-type="matrix">
+    <div class="q-label"><span class="q-num">Q7.</span> Rate how much each of these frustrates you. <em>(1 = Not at all, 5 = Very much)</em></div>
+    <table class="matrix-table" id="matrix-q7">
+      <thead>
+        <tr>
+          <th>Frustration</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body-q7"></tbody>
+    </table>
+    <div class="error-msg">Please rate all items</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" style="animation-delay:0.4s" id="q8-block" data-required="true" data-type="radio">
+    <div class="q-label"><span class="q-num">Q8.</span> Have you ever tried any app for meal planning or healthy eating?</div>
+    <div class="options-grid">
+      <label class="option-item" onclick="selectOption(this,'q8'); checkQ8()">
+        <input type="radio" name="q8" value="yes_using">
+        <div class="option-dot"></div>
+        <div class="option-text">Yes — still using it</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q8'); checkQ8()">
+        <input type="radio" name="q8" value="yes_stopped">
+        <div class="option-dot"></div>
+        <div class="option-text">Yes — but stopped using it</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q8'); checkQ8()">
+        <input type="radio" name="q8" value="no_never">
+        <div class="option-dot"></div>
+        <div class="option-text">No — never tried</div>
+      </label>
+      <label class="option-item" onclick="selectOption(this,'q8'); checkQ8()">
+        <input type="radio" name="q8" value="no_didnt_know">
+        <div class="option-dot"></div>
+        <div class="option-text">No — didn't know such apps exist</div>
+      </label>
+    </div>
+    <div class="error-msg">Please select one option</div>
+
+    <!-- Q9 conditional -->
+    <div class="conditional-block" id="q9-conditional">
+      <div class="q-block" style="margin-bottom:0;opacity:1;transform:none" id="q9-block" data-required="false" data-type="checkbox">
+        <div class="q-label"><span class="q-num">Q9.</span> Why did you stop using it? <em>(Select all that apply)</em></div>
+        <div class="options-grid">
+          <label class="option-item" onclick="toggleCheck(this)">
+            <input type="checkbox" name="q9" value="no_indian">
+            <div class="option-check"></div>
+            <div class="option-text">Didn't have Indian recipes</div>
+          </label>
+          <label class="option-item" onclick="toggleCheck(this)">
+            <input type="checkbox" name="q9" value="expensive">
+            <div class="option-check"></div>
+            <div class="option-text">Too expensive</div>
+          </label>
+          <label class="option-item" onclick="toggleCheck(this)">
+            <input type="checkbox" name="q9" value="complicated">
+            <div class="option-check"></div>
+            <div class="option-text">Too complicated to use</div>
+          </label>
+          <label class="option-item" onclick="toggleCheck(this)">
+            <input type="checkbox" name="q9" value="not_personal">
+            <div class="option-check"></div>
+            <div class="option-text">Didn't feel personalized</div>
+          </label>
+          <label class="option-item" onclick="toggleCheck(this)">
+            <input type="checkbox" name="q9" value="forgot">
+            <div class="option-check"></div>
+            <div class="option-text">Forgot about it / lost habit</div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">What You Actually Need</div>
+  </div>
+  <div class="section-divider"></div>
+
+  <!-- Q10 Rank -->
+  <div class="q-block" style="animation-delay:0.45s" id="q10-block" data-required="false" data-type="rank">
+    <div class="q-label"><span class="q-num">Q10.</span> If a meal planning tool existed for you, what would matter MOST?</div>
+    <div class="q-hint">Drag to reorder — most important at top</div>
+    <div class="rank-list" id="rank-q10"></div>
+  </div>
+
+  <!-- Q11 Open -->
+  <div class="q-block" style="animation-delay:0.5s" id="q11-block" data-required="true" data-type="open">
+    <div class="q-label"><span class="q-num">Q11.</span> In your own words — what is the ONE thing that would make you actually stick to home cooking every week? 🤔</div>
+    <textarea class="open-textarea" id="open-q11" placeholder="Be honest — there are no wrong answers here..." rows="4"></textarea>
+    <div class="error-msg">Please share your thoughts — this is the most important question!</div>
+  </div>
+
+  <!-- Q12 Contact -->
+  <div class="q-block" style="animation-delay:0.55s" id="q12-block" data-required="false" data-type="open">
+    <div class="q-label"><span class="q-num">Q12.</span> Would you be open to a 15-min call to share more? Drop your number or email. <em>(Optional)</em></div>
+    <input type="text" class="text-input" id="open-q12" placeholder="9876543210 or name@email.com">
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-section">
+    <h3>Shukriya! 🙏</h3>
+    <p>Your response helps build something that actually works for Indian users.</p>
+    <button class="submit-btn" onclick="submitForm()">Submit My Response →</button>
+  </div>
+
+</div>
+
+<!-- Success -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2>Bahut shukriya!</h2>
+  <p>Your response has been recorded. You're helping build a smarter, Indian-first meal planning experience. We'll reach out if you shared your contact!</p>
+</div>
+
+<script>
+  // ---- Data store ----
+  const answers = {};
+
+  // ---- Progress ----
+  const TOTAL_Q = 12;
+  function updateProgress() {
+    let filled = 0;
+    // q1-q8 radio
+    ['q1','q2','q4','q8'].forEach(q => { if(document.querySelector(`input[name="${q}"]:checked`)) filled++; });
+    // q3 rating
+    if(answers['q3']) filled++;
+    // q5,q6 checkbox
+    ['q5','q6'].forEach(q => { if(document.querySelectorAll(`input[name="${q}"]:checked`).length > 0) filled++; });
+    // q7 matrix
+    const matrixRows = document.querySelectorAll('#matrix-body-q7 tr');
+    let allRated = matrixRows.length > 0;
+    matrixRows.forEach(r => { if(!r.querySelector('.matrix-radio.selected')) allRated = false; });
+    if(allRated && matrixRows.length > 0) filled++;
+    // q11
+    if(document.getElementById('open-q11')?.value.trim().length > 10) filled++;
+    // q10,q12 always count as partial
+    filled += 2;
+
+    const pct = Math.min(Math.round((filled / TOTAL_Q) * 100), 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `${filled} / ${TOTAL_Q}`;
+  }
+
+  // ---- Radio select ----
+  function selectOption(el, name) {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(i => {
+      i.closest('.option-item').classList.remove('selected');
+    });
+    el.classList.add('selected');
+    document.getElementById(`${name}-block`)?.classList.remove('error');
+    updateProgress();
+  }
+
+  // ---- Checkbox toggle ----
+  function toggleCheck(el) {
+    el.classList.toggle('selected');
+    const cb = el.querySelector('input[type="checkbox"]');
+    cb.checked = el.classList.contains('selected');
+    updateProgress();
+  }
+
+  // ---- Rating buttons ----
+  function buildRating(id, name) {
+    const wrap = document.getElementById(id);
+    for(let i=1;i<=5;i++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'rating-btn';
+      btn.textContent = i;
+      btn.onclick = function(){
+        wrap.querySelectorAll('.rating-btn').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+        answers[name] = i;
+        document.getElementById(`${name}-block`)?.classList.remove('error');
+        updateProgress();
+      };
+      wrap.appendChild(btn);
+    }
+  }
+  buildRating('rating-q3','q3');
+
+  // ---- Matrix ----
+  const matrixRows = [
+    "Deciding what to cook daily",
+    "Finding recipes that match my diet / health goals",
+    "Not knowing what to do with ingredients already at home",
+    "Planning for the full week in advance",
+    "Making healthy food that's also quick to cook"
+  ];
+
+  const tbody = document.getElementById('matrix-body-q7');
+  matrixRows.forEach((text, ri) => {
+    const tr = document.createElement('tr');
+    let html = `<td>${text}</td>`;
+    for(let c=1;c<=5;c++){
+      html += `<td><div class="matrix-radio" onclick="selectMatrix(this,${ri},${c})" data-row="${ri}" data-col="${c}"></div></td>`;
+    }
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
+  });
+
+  function selectMatrix(el, row, col) {
+    document.querySelectorAll(`#matrix-body-q7 .matrix-radio[data-row="${row}"]`).forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    if(!answers['q7']) answers['q7'] = {};
+    answers['q7'][row] = col;
+    document.getElementById('q7-block')?.classList.remove('error');
+    updateProgress();
+  }
+
+  // ---- Q8 conditional ----
+  function checkQ8() {
+    const val = document.querySelector('input[name="q8"]:checked')?.value;
+    const cond = document.getElementById('q9-conditional');
+    if(val === 'yes_stopped') {
+      cond.classList.add('visible');
+    } else {
+      cond.classList.remove('visible');
+    }
+    updateProgress();
+  }
+
+  // ---- Rank Q10 ----
+  const rankItems = [
+    "Suggests meals based on time I have to cook",
+    "Uses ingredients already in my kitchen",
+    "Matches my diet type (veg, keto, PCOS, diabetic etc.)",
+    "Gives me Indian regional recipes I actually eat",
+    "Builds my full week plan in one go",
+    "Is free or very affordable (under ₹99/month)",
+    "Works in Hindi or my regional language"
+  ];
+
+  const rankList = document.getElementById('rank-q10');
+  rankItems.forEach((text, i) => {
+    const div = document.createElement('div');
+    div.className = 'rank-item';
+    div.draggable = true;
+    div.dataset.index = i;
+    div.innerHTML = `<div class="rank-num">${i+1}</div><div class="rank-text">${text}</div><div class="drag-icon">⠿</div>`;
+    rankList.appendChild(div);
+  });
+
+  let dragSrc = null;
+  rankList.addEventListener('dragstart', e => {
+    dragSrc = e.target.closest('.rank-item');
+    dragSrc.classList.add('dragging');
+  });
+  rankList.addEventListener('dragend', e => {
+    e.target.closest('.rank-item')?.classList.remove('dragging');
+    document.querySelectorAll('.rank-item').forEach(el => el.classList.remove('drag-over'));
+    updateRankNums();
+  });
+  rankList.addEventListener('dragover', e => {
+    e.preventDefault();
+    const target = e.target.closest('.rank-item');
+    if(target && target !== dragSrc) {
+      document.querySelectorAll('.rank-item').forEach(el => el.classList.remove('drag-over'));
+      target.classList.add('drag-over');
+    }
+  });
+  rankList.addEventListener('drop', e => {
+    e.preventDefault();
+    const target = e.target.closest('.rank-item');
+    if(target && target !== dragSrc) {
+      const items = [...rankList.querySelectorAll('.rank-item')];
+      const srcIdx = items.indexOf(dragSrc);
+      const tgtIdx = items.indexOf(target);
+      if(srcIdx < tgtIdx) rankList.insertBefore(dragSrc, target.nextSibling);
+      else rankList.insertBefore(dragSrc, target);
+      updateRankNums();
+    }
+  });
+
+  function updateRankNums() {
+    rankList.querySelectorAll('.rank-item').forEach((el,i) => {
+      el.querySelector('.rank-num').textContent = i+1;
+    });
+  }
+
+  // ---- open text progress ----
+  document.getElementById('open-q11').addEventListener('input', () => {
+    document.getElementById('q11-block').classList.remove('error');
+    updateProgress();
+  });
+
+  // ---- Validation ----
+  function validate() {
+    let valid = true;
+
+    // Radio
+    ['q1','q2','q4','q8'].forEach(q => {
+      const block = document.getElementById(`${q}-block`);
+      if(!document.querySelector(`input[name="${q}"]:checked`)) {
+        block.classList.add('error'); valid = false;
+      }
+    });
+
+    // Rating q3
+    if(!answers['q3']) {
+      document.getElementById('q3-block').classList.add('error'); valid = false;
+    }
+
+    // Checkboxes
+    ['q5','q6'].forEach(q => {
+      const block = document.getElementById(`${q}-block`);
+      if(document.querySelectorAll(`input[name="${q}"]:checked`).length === 0) {
+        block.classList.add('error'); valid = false;
+      }
+    });
+
+    // Matrix q7
+    const rows = document.querySelectorAll('#matrix-body-q7 tr');
+    let allRated = true;
+    rows.forEach(r => { if(!r.querySelector('.matrix-radio.selected')) allRated = false; });
+    if(!allRated) {
+      document.getElementById('q7-block').classList.add('error'); valid = false;
+    }
+
+    // Open q11
+    const q11val = document.getElementById('open-q11').value.trim();
+    if(q11val.length < 10) {
+      document.getElementById('q11-block').classList.add('error'); valid = false;
+    }
+
+    return valid;
+  }
+
+  // ---- Submit ----
+  function submitForm() {
+    if(!validate()) {
+      const firstError = document.querySelector('.q-block.error');
+      if(firstError) firstError.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+    // Collect all answers
+    const finalData = {};
+    ['q1','q2','q4','q8'].forEach(q => {
+      finalData[q] = document.querySelector(`input[name="${q}"]:checked`)?.value;
+    });
+    finalData['q3'] = answers['q3'];
+    ['q5','q6','q9'].forEach(q => {
+      finalData[q] = [...document.querySelectorAll(`input[name="${q}"]:checked`)].map(i=>i.value);
+    });
+    finalData['q7'] = answers['q7'];
+    finalData['q10_order'] = [...rankList.querySelectorAll('.rank-item')].map(el => el.querySelector('.rank-text').textContent);
+    finalData['q11'] = document.getElementById('open-q11').value.trim();
+    finalData['q12'] = document.getElementById('open-q12').value.trim();
+    console.log('Survey Response:', JSON.stringify(finalData, null, 2));
+
+    document.getElementById('formMain').style.display = 'none';
+    document.getElementById('successScreen').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Init
+  updateProgress();
+</script>
+</body>
+</html>
